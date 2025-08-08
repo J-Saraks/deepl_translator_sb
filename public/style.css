@@ -1,0 +1,38 @@
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f8;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    textarea {
+        width: 20%;
+        height: 100px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        resize: vertical;
+        box-sizing: border-box;
+    }
+
+    button {
+        margin-top: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #357edd;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #2565c0;
+    }

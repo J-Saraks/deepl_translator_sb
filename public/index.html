@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>DeepL Translator with Language-Specific Glossary Fixes</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <textarea id="inputText" rows="4" cols="50" placeholder="Enter text"></textarea>
+    <button id="translateBtn">Translate</button>
+    <br>
+    <div id="translations">
+        <h2>Translations:</h2>
+    </div>
+
+    <script>
+        // Glossary terms grouped by language code (lowercase keys for case-insensitive match)
+        const glossaryTerms = {
+            RU: {
+                "(AFG)": "(АФГ)",
+                "(ALB)": "(АЛБ)",
+                "(DZA)": "(АЛЖ)",
+                "(AND)": "(АНД)",
+                "(AGO)": "(АНГ)",
+                "(ARG)": "(АРГ)",
+                "(ARM)": "(АРМ)",
+                "(AUT)": "(АВТ)",
+                "(AZE)": "(АЗЕ)",
+                "(AIA)": "(АНА)",
+                "(BHS)": "(БАГ)",
+                "(BHR)": "(БАХ)",
+                "(BGD)": "(БАН)",
+                "(BRB)": "(БАР)",
+                "(BLR)": "(БЕИ)",
+                "(BEL)": "(БЕЛ)",
+                "(BEN)": "(БЕН)",
+                "(BMU)": "(БЕР)",
+                "(BTN)": "(БХУ)",
+                "(BOL)": "(БОЛ)",
+                "(BIH)": "(БОС)",
+                "(BWA)": "(БОТ)",
+                "(BRA)": "(БРА)",
+                "(BRN)": "(БРУ)",
+                "(BGR)": "(БЪЛ)",
+                "(BFA)": "(БУР)",
+                "(CPV)": "(КАП)",
+                "(KHM)": "(КМР)",
+                "(CMR)": "(КАМ)",
+                "(CAN)": "(КАН)",
+                "(CAF)": "(ЦАР)",
+                "(TCD)": "(ЧАД)",
+                "(CHL)": "(ЧИЛ)",
+                "(CHN)": "(КИТ)",
+                "(COL)": "(КОЛ)",
+                "(COM)": "(КОМ)",
+                "(COG)": "(КОН)",
+                "(CRI)": "(КОС)",
+                "(HRV)": "(ХРВ)",
+                "(CUB)": "(КУБ)",
+                "(CYP)": "(КИП)",
+                "(CZE)": "(ЧЕХ)",
+                "(DEN)": "(ДАН)",
+                "(DJI)": "(ДЖИ)",
+                "(DMA)": "(ДОМ)",
+                "(DOM)": "(ДРК)",
+                "(ECU)": "(ЕКВ)",
+                "(EGY)": "(ЕГИ)",
+                "(SLV)": "(САЛ)",
+                "(ERI)": "(ЭРИ)",
+                "(EST)": "(ЭСТ)",
+                "(ETH)": "(ЭТИ)",
+                "(FJI)": "(ФИД)",
+                "(FIN)": "(ФИН)",
+                "(FRA)": "(ФРН)",
+                "(GAB)": "(ГАБ)",
+                "(GMB)": "(ГАМ)",
+                "(GEO)": "(ГРУ)",
+                "(DEU)": "(ГЕР)",
+                "(GHA)": "(ГАН)",
+                "(GIB)": "(ГИБ)",
+                "(GRC)": "(ГРЦ)",
+                "(GRD)": "(ГРД)",
+                "(GTM)": "(ГТМ)",
+                "(GIN)": "(ГИН)",
+                "(GNB)": "(ГНБ)",
+                "(GUY)": "(ГАЙ)",
+                "(HTI)": "(ГАИ)",
+                "(HND)": "(ГОН)",
+                "(HUN)": "(ВЕН)",
+                "(ISL)": "(ИСЛ)",
+                "(IND)": "(ИНД)",
+                "(IDN)": "(ИНД)",
+                "(IRN)": "(ИРН)",
+                "(IRQ)": "(ИРК)",
+                "(IRL)": "(ИРЛ)",
+                "(ISR)": "(ИЗР)",
+                "(ITA)": "(ИТА)",
+                "(JAM)": "(ЯМА)",
+                "(JPN)": "(ЯПН)",
+                "(JOR)": "(ИОР)",
+                "(KAZ)": "(КАЗ)",
+                "(KEN)": "(КЕН)",
+                "(KOR)": "(КОР)",
+                "(KWT)": "(КУВ)",
+                "(KGZ)": "(КРГ)",
+                "(LAO)": "(ЛАО)",
+                "(LVA)": "(ЛАТ)",
+                "(LBN)": "(ЛИВ)",
+                "(LSO)": "(ЛЕС)",
+                "(LBR)": "(ЛИБ)",
+                "(LBY)": "(ЛИВ)",
+                "(LIE)": "(ЛИХ)",
+                "(LTU)": "(ЛИТ)",
+                "(LUX)": "(ЛЮК)",
+                "(MAC)": "(МАК)",
+                "(MDG)": "(МДГ)",
+                "(MWI)": "(МЛВ)",
+                "(MYS)": "(МАЛ)",
+                "(MDV)": "(МЛЬ)",
+                "(MLI)": "(МЛИ)",
+                "(MLT)": "(МЛТ)",
+                "(MRT)": "(МРТ)",
+                "(MUS)": "(МУС)",
+                "(MEX)": "(МЕК)",
+                "(MDA)": "(МЛД)",
+                "(MCO)": "(МОН)",
+                "(MNG)": "(МОН)",
+                "(MNE)": "(ЧЕР)",
+                "(MAR)": "(МАР)",
+                "(MOZ)": "(МОЗ)",
+                "(MMR)": "(ММР)",
+                "(NAM)": "(НАМ)",
+                "(NPL)": "(НЕП)",
+                "(NLD)": "(НИД)",
+                "(NZL)": "(НЗЛ)",
+                "(NIC)": "(НИК)",
+                "(NER)": "(НИГ)",
+                "(NGA)": "(НИГ)",
+                "(NOR)": "(НОР)",
+                "(OMN)": "(ОМН)",
+                "(PAK)": "(ПАК)",
+                "(PAN)": "(ПАН)",
+                "(PNG)": "(ПАП)",
+                "(PRY)": "(ПАР)",
+                "(PER)": "(ПЕР)",
+                "(PHL)": "(ФИЛ)",
+                "(POL)": "(ПОЛ)",
+                "(PRT)": "(ПОР)",
+                "(QAT)": "(КАТ)",
+                "(ROU)": "(РУМ)",
+                "(RUS)": "(РУС)",
+                "(RWA)": "(РУА)",
+                "(SAU)": "(САУ)",
+                "(SEN)": "(СЕН)",
+                "(SRB)": "(СЕР)",
+                "(SYC)": "(СЕЙ)",
+                "(SLE)": "(СЬЕ)",
+                "(SGP)": "(СИН)",
+                "(SVK)": "(СЛВ)",
+                "(SVN)": "(СЛВ)",
+                "(SOM)": "(СОМ)",
+                "(ZAF)": "(ЮАР)",
+                "(ESP)": "(ИСП)",
+                "(LKA)": "(ШРИ)",
+                "(SDN)": "(СУД)",
+                "(SUR)": "(СУР)",
+                "(SWE)": "(ШВЕ)",
+                "(CHE)": "(ШВЙ)",
+                "(SYR)": "(СИР)",
+                "(TJK)": "(ТАД)",
+                "(TZA)": "(ТАН)",
+                "(THA)": "(ТАЙ)",
+                "(TGO)": "(ТОГ)",
+                "(TON)": "(ТОН)",
+                "(TUN)": "(ТУН)",
+                "(TUR)": "(ТУР)",
+                "(TPE)": "(ТАЙ)",
+                "(UGA)": "(УГН)",
+                "(UKR)": "(УКР)",
+                "(ARE)": "(ОАЭ)",
+                "(GBR)": "(ВБР)",
+                "(URY)": "(УРУ)",
+                "(UZB)": "(УЗБ)",
+                "(VEN)": "(ВЕН)",
+                "(VNM)": "(ВЬТ)",
+                "(YEM)": "(ЙЕМ)",
+                "(ZMB)": "(ЗАМ)",
+                "(ZWE)": "(ЗИМ)",
+                "(PUR)": "(ПУЭ)",
+                "(AUS)": "(АВС)",
+                "(ENG)": "(ВЕЛ)",
+                "(CZE)": "(ЧЕШ)",
+                "женщины": "Женщины",
+                "(женщины)": "(Женщины)"
+                // Add more Russian-specific fixes here
+            },
+            LV: {
+                "sievietes": "Sievietes"
+                // Latvian fixes here
+            },
+            LT: {
+                "moterys": "Moterys"
+                // Lithuanian fixes here
+            },
+            ET: {
+                "naised": "Naised"
+                // Estonian fixes here
+            },
+            FI: {
+                "naiset": "Naiset"
+                // Finnish fixes here
+            }
+            // Add other languages if needed
+        };
+
+        // Apply glossary fixes only for the given language
+        function applyGlossaryFixes(text, lang) {
+            let fixedText = text;
+            const terms = glossaryTerms[lang];
+            if (!terms) return fixedText; // no fixes for this language
+
+            for (const [key, value] of Object.entries(terms)) {
+                // Escape special regex characters in key
+                const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                // Use word boundaries, case-insensitive and global flags
+                const regex = new RegExp(`(?<!\\w)${escapedKey}(?!\\w)`, 'giu');
+                fixedText = fixedText.replace(regex, value);
+            }
+            return fixedText;
+        }
+
+        // Map language codes to readable names
+        function getLanguageName(code) {
+            const map = {
+                LV: 'Latvian',
+                ET: 'Estonian',
+                LT: 'Lithuanian',
+                RU: 'Russian',
+                FI: 'Finnish'
+            };
+            return map[code] || code;
+        }
+
+        // Fetch translations from server and display with glossary fixes
+        async function fetchAndDisplayTranslations() {
+            const inputText = document.getElementById('inputText').value;
+            if (!inputText.trim()) return alert("Please enter some text to translate.");
+
+            try {
+                const response = await fetch('/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: inputText }),
+                });
+
+                if (!response.ok) {
+                    alert("Translation failed");
+                    return;
+                }
+
+                const data = await response.json();
+                const container = document.getElementById('translations');
+                container.innerHTML = '';
+
+                data.translations.forEach(({ language, translation }) => {
+                    const fixedTranslation = applyGlossaryFixes(translation, language);
+                    const p = document.createElement('p');
+                    p.textContent = `[${getLanguageName(language)}]: ${fixedTranslation}`;
+                    container.appendChild(p);
+                });
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        }
+
+        document.getElementById('translateBtn').addEventListener('click', fetchAndDisplayTranslations);
+    </script>
+</body>
+
+</html>

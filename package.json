@@ -1,0 +1,23 @@
+{
+  "name": "deepl_translator_sb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "csv-parse": "^6.1.0",
+    "deepl-node": "^1.19.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
